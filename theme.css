@@ -25,7 +25,7 @@ body { color: var(--text); }
    .skinHeader = mise en page classique, .MuiAppBar-positionFixed = nouvelle mise en page.
    Dans la nouvelle, la barre n'est qu'un conteneur : chaque ligne (navigation, outils de
    bibliothèque) devient sa propre pilule, empilées du bas vers le haut. */
-.skinHeader:not(.osdHeader),
+html:not(.layout-tv) .skinHeader:not(.osdHeader),
 .MuiAppBar-positionFixed:not(.dashboard-appBar) > .MuiToolbar-root {
   border-radius: 999px !important;
   background: var(--surface) !important;
@@ -34,7 +34,7 @@ body { color: var(--text); }
   border: 1px solid var(--border);
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12) !important;
 }
-.skinHeader:not(.osdHeader) {
+html:not(.layout-tv) .skinHeader:not(.osdHeader) {
   position: fixed !important;
   top: auto !important;
   bottom: 18px !important;
@@ -88,14 +88,14 @@ body { color: var(--text); }
 .MuiAppBar-positionFixed + div[aria-hidden="true"] { height: 0 !important; }
 .MuiAppBar-positionFixed .MuiToolbar-root > .MuiBox-root[style*="flex-grow"],
 .MuiAppBar-positionFixed .MuiToolbar-root > div:empty { display: none; }
-.skinHeader:not(.osdHeader) .headerTop { padding: 0 !important; gap: 4px; }
-.skinHeader:not(.osdHeader) .pageTitle { display: none !important; }
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .headerTop { padding: 0 !important; gap: 4px; }
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .pageTitle { display: none !important; }
 
 /* Boutons du dock en pilules */
 .MuiAppBar-positionFixed .MuiButton-root,
 .MuiAppBar-positionFixed .MuiIconButton-root,
-.skinHeader:not(.osdHeader) .emby-tab-button,
-.skinHeader:not(.osdHeader) .headerButton {
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button,
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .headerButton {
   border-radius: 999px !important;
   margin: 0 2px !important;
   padding-inline: 14px !important;
@@ -104,12 +104,12 @@ body { color: var(--text); }
 .MuiAppBar-positionFixed .MuiIconButton-root { padding: 8px !important; }
 .MuiAppBar-positionFixed .MuiButton-root:hover,
 .MuiAppBar-positionFixed .MuiIconButton-root:hover,
-.skinHeader:not(.osdHeader) .emby-tab-button:hover,
-.skinHeader:not(.osdHeader) .headerButton:hover {
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button:hover,
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .headerButton:hover {
   background: rgba(255, 255, 255, .12) !important;
 }
 .MuiAppBar-positionFixed > .MuiToolbar-root:not(.padded-left) .MuiButton-colorPrimary,
-.skinHeader:not(.osdHeader) .emby-tab-button-active {
+html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
   background: var(--accent) !important;
   color: var(--accent-text) !important;
 }
@@ -210,6 +210,65 @@ body { color: var(--text); }
 .listItemImage, .listItemImage-large { border-radius: 16px !important; overflow: hidden; }
 .listItemBodyText:first-child { font-weight: 600; }
 .listItem .itemProgressBar { margin: 0 10px 8px !important; }
+
+/* ---------- Adaptation aux écrans ---------- */
+
+/* Le dock reste au-dessus de la barre système des téléphones (iPhone, Android gestuel) */
+html:not(.layout-tv) .skinHeader:not(.osdHeader),
+.MuiAppBar-positionFixed:not(.dashboard-appBar) {
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* Mobile : coins plus petits, dock défilable, boutons de bibliothèque en icônes seules */
+@media (max-width: 700px) {
+  :root { --radius: 16px; }
+  html:not(.layout-tv) .skinHeader:not(.osdHeader),
+  .MuiAppBar-positionFixed:not(.dashboard-appBar) { bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important; }
+  .MuiAppBar-positionFixed:not(.dashboard-appBar) > .MuiToolbar-root,
+  html:not(.layout-tv) .skinHeader:not(.osdHeader) {
+    max-width: calc(100vw - 20px);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .MuiAppBar-positionFixed > .MuiToolbar-root:not(.padded-left) .MuiButton-root {
+    font-size: 0 !important;
+    min-width: 0 !important;
+    padding: 8px !important;
+  }
+  .MuiAppBar-positionFixed .MuiButton-startIcon { margin: 0 !important; }
+  .MuiAppBar-positionFixed .MuiButton-startIcon > * { font-size: 22px !important; }
+  .mainDetailButtons .detailButton { width: 42px; height: 42px; }
+  .detailPageContent .listItem, .childrenItemsContainer .listItem { padding: 8px !important; }
+  .page { padding-bottom: 7em !important; }
+}
+
+/* Écrans tactiles : pas d'effet de survol qui reste collé après un appui */
+@media (hover: none) {
+  html:not(.layout-tv) .card:hover .cardBox { transform: none; }
+  html:not(.layout-tv) .detailPageContent .listItem:hover { transform: none; }
+}
+
+/* TV : barre en haut d'origine (navigation à la télécommande), en verre ;
+   l'élément sélectionné est bien visible de loin */
+.layout-tv .skinHeader:not(.osdHeader) {
+  background: var(--surface) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+.layout-tv .card:focus .cardBox, .layout-tv .card:focus-within .cardBox { transform: scale(1.06); }
+.layout-tv .card:focus .cardScalable, .layout-tv .card:focus-within .cardScalable {
+  box-shadow: 0 0 0 3px rgba(var(--glow), .8), 0 0 40px rgba(var(--glow), .35);
+}
+.layout-tv .detailButton:focus, .layout-tv .listItem:focus, .layout-tv .emby-tab-button:focus {
+  box-shadow: 0 0 0 3px rgba(var(--glow), .8) !important;
+}
+.layout-tv .page { padding-top: revert !important; padding-bottom: 2em !important; }
+
+/* Ultrawide : le texte ne s'étire pas sur toute la largeur, le contenu de détail reste centré */
+@media (min-aspect-ratio: 21/9) and (min-width: 2200px) {
+  .detailPageContent, .detailPagePrimaryContainer { max-width: 2200px; margin-inline: auto !important; }
+  .overview, .itemOverview { max-width: 110ch; }
+}
 
 /* Apparition en fondu */
 .page { animation: fadeIn .4s var(--ease); }
