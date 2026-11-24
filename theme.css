@@ -125,6 +125,49 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
   border: 1px solid var(--border);
 }
 .actionSheet, .dialog { border-radius: var(--radius) !important; }
+
+/* Fenêtres d'options (modifier, identifier, paramètres…) : verre plus opaque pour la lecture */
+.dialog, .formDialog { background: rgba(18, 18, 24, .78) !important; overflow: hidden; }
+.dialogBackdropOpened { background: rgba(0, 0, 0, .55) !important; backdrop-filter: blur(6px); }
+.formDialogHeader, .formDialogFooter,
+.formDialogHeader:not(.formDialogHeader-clear), .formDialogFooter:not(.formDialogFooter-clear) {
+  background: rgba(255, 255, 255, .03) !important;
+  backdrop-filter: none !important;
+  border: 0 !important;
+}
+.formDialogHeader { border-bottom: 1px solid rgba(255, 255, 255, .07) !important; }
+.formDialogFooter { border-top: 1px solid rgba(255, 255, 255, .07) !important; }
+.formDialogFooter .emby-button, .dialog .raised:not(.button-submit) {
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, .07) !important;
+  border: 1px solid var(--border);
+}
+.formDialogFooter .emby-button:hover, .dialog .raised:not(.button-submit):hover { background: rgba(255, 255, 255, .13) !important; }
+.dialog .paperList, .dialog .collapseContent, .dialog .visualCardBox { background: rgba(255, 255, 255, .035) !important; border-radius: 16px; }
+
+/* Champs de saisie en verre, anneau cyan au focus */
+.emby-input, .emby-select-withcolor, .emby-textarea, .searchFieldsInner input {
+  background: rgba(255, 255, 255, .06) !important;
+  border: 1px solid rgba(255, 255, 255, .1) !important;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+.emby-input:focus, .emby-select-withcolor:focus, .emby-textarea:focus {
+  border-color: rgba(var(--glow), .6) !important;
+  box-shadow: 0 0 0 3px rgba(var(--glow), .15);
+}
+.emby-checkbox:checked + span + .checkboxOutline { background: rgba(var(--glow), .9) !important; border-color: rgba(var(--glow), .9) !important; }
+
+/* Menus contextuels (⋮) */
+.actionSheet { background: rgba(18, 18, 24, .82) !important; }
+.actionSheetMenuItem { border-radius: 12px; margin: 2px 6px; }
+.actionSheetMenuItem:hover { background: rgba(255, 255, 255, .08) !important; }
+.MuiPaper-root.MuiPopover-paper, .MuiMenu-paper {
+  background: rgba(18, 18, 24, .82) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  border-radius: 16px !important;
+}
 .nowPlayingBar { bottom: 84px; left: 16px; right: 16px; border-radius: var(--radius); }
 
 /* ---------- Affiches ---------- */
