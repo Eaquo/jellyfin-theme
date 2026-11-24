@@ -4,8 +4,10 @@
 :root {
   --accent: #ffffff;
   --accent-text: #0b0b0e;
+  --glow: 80, 220, 255; /* halo cyan, en r, g, b */
   --bg: #07070a;
   --surface: rgba(28, 28, 34, .5);
+  --surface-soft: rgba(255, 255, 255, .045);
   --border: rgba(255, 255, 255, .14);
   --text: #eef0f4;
   --radius: 22px;
@@ -16,13 +18,23 @@
 
 /* Fond très sombre, image de fond assombrie */
 html, body, .backgroundContainer, .skinBody { background: var(--bg) !important; }
-.backdropImage { filter: brightness(.35) saturate(1.1); }
+.backdropImage { filter: brightness(.4) saturate(1.1); }
 body { color: var(--text); }
 
 /* ---------- Dock flottant ----------
-   .skinHeader = mise en page classique, .MuiAppBar-positionFixed = nouvelle mise en page */
+   .skinHeader = mise en page classique, .MuiAppBar-positionFixed = nouvelle mise en page.
+   Dans la nouvelle, la barre n'est qu'un conteneur : chaque ligne (navigation, outils de
+   bibliothèque) devient sa propre pilule, empilées du bas vers le haut. */
 .skinHeader:not(.osdHeader),
-.MuiAppBar-positionFixed:not(.dashboard-appBar) {
+.MuiAppBar-positionFixed:not(.dashboard-appBar) > .MuiToolbar-root {
+  border-radius: 999px !important;
+  background: var(--surface) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12) !important;
+}
+.skinHeader:not(.osdHeader) {
   position: fixed !important;
   top: auto !important;
   bottom: 18px !important;
@@ -32,17 +44,48 @@ body { color: var(--text); }
   max-width: calc(100vw - 32px);
   transform: translateX(-50%) !important;
   padding: 6px 10px !important;
-  border-radius: 999px !important;
-  background: var(--surface) !important;
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12) !important;
   z-index: 1100;
 }
+.MuiAppBar-positionFixed:not(.dashboard-appBar) {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 18px !important;
+  left: 0 !important;
+  right: 0 !important;
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  align-items: center;
+  gap: 10px;
+  background: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  pointer-events: none;
+  z-index: 1100;
+}
+.MuiAppBar-positionFixed:not(.dashboard-appBar) > .MuiToolbar-root {
+  pointer-events: auto;
+  width: fit-content;
+  max-width: calc(100vw - 32px);
+  min-height: 0 !important;
+  padding: 6px 10px !important;
+  gap: 4px;
+}
+/* Ligne des outils de bibliothèque : plus petite et plus discrète */
+.MuiAppBar-positionFixed > .MuiToolbar-root.padded-left {
+  padding: 4px 8px !important;
+  background: rgba(20, 20, 26, .4) !important;
+  font-size: .85em;
+  flex-wrap: nowrap !important;
+}
+.MuiAppBar-positionFixed > .MuiToolbar-root.padded-left > * { margin: 0 !important; flex-grow: 0 !important; }
+.MuiAppBar-positionFixed > .MuiToolbar-root.padded-left .MuiButton-root {
+  background: transparent !important;
+  color: inherit !important;
+  padding-block: 4px !important;
+}
+
 /* Bloc vide qui réservait la hauteur de la barre en haut */
 .MuiAppBar-positionFixed + div[aria-hidden="true"] { height: 0 !important; }
-.MuiAppBar-positionFixed .MuiToolbar-root { min-height: 0 !important; padding: 0 !important; gap: 4px; }
 .MuiAppBar-positionFixed .MuiToolbar-root > .MuiBox-root[style*="flex-grow"],
 .MuiAppBar-positionFixed .MuiToolbar-root > div:empty { display: none; }
 .skinHeader:not(.osdHeader) .headerTop { padding: 0 !important; gap: 4px; }
@@ -65,14 +108,14 @@ body { color: var(--text); }
 .skinHeader:not(.osdHeader) .headerButton:hover {
   background: rgba(255, 255, 255, .12) !important;
 }
-.MuiAppBar-positionFixed .MuiButton-colorPrimary,
+.MuiAppBar-positionFixed > .MuiToolbar-root:not(.padded-left) .MuiButton-colorPrimary,
 .skinHeader:not(.osdHeader) .emby-tab-button-active {
   background: var(--accent) !important;
   color: var(--accent-text) !important;
 }
 
 /* Le contenu n'a plus besoin de place en haut, mais en bas */
-.page { padding-top: 1.5em !important; padding-bottom: 6em !important; }
+.page { padding-top: 1.5em !important; padding-bottom: 8em !important; }
 
 /* ---------- Surfaces en verre ---------- */
 .mainDrawer, .actionSheet, .dialog, .videoOsdBottom, .nowPlayingBar {
@@ -95,10 +138,14 @@ body { color: var(--text); }
   border: 1px solid var(--border);
   border-radius: var(--radius);
 }
+/* Place pour que la carte soulevée ne soit pas coupée en haut */
+.emby-scroller { padding-top: 10px; margin-top: -10px; }
 .cardBox { transition: transform .35s var(--ease); }
 .card:hover .cardBox, .card:focus-within .cardBox { transform: translateY(-6px) scale(1.03); }
 .cardScalable { box-shadow: 0 8px 22px rgba(0, 0, 0, .45); transition: box-shadow .35s var(--ease); }
-.card:hover .cardScalable { box-shadow: 0 18px 40px rgba(0, 0, 0, .7), 0 0 0 1px var(--border); }
+.card:hover .cardScalable, .card:focus-within .cardScalable {
+  box-shadow: 0 0 0 1px rgba(var(--glow), .35), 0 10px 30px rgba(var(--glow), .22), 0 18px 40px rgba(0, 0, 0, .6);
+}
 .itemProgressBar { border-radius: 999px; overflow: hidden; margin: 0 12px 10px !important; }
 .itemProgressBarForeground { background: var(--accent) !important; }
 
@@ -113,15 +160,56 @@ body { color: var(--text); }
 }
 .mdl-slider-background-lower { background: var(--accent) !important; }
 
-/* ---------- Page de détail ---------- */
-.detailRibbon {
-  background: var(--surface) !important;
+/* ---------- Page de détail (film, série, épisode) ---------- */
+/* Pas de bande grise : titre et boutons flottent sur le fond */
+.detailRibbon { background: none !important; box-shadow: none !important; }
+.detailImageContainer .cardScalable {
+  box-shadow: 0 0 0 1px var(--border), 0 0 60px rgba(var(--glow), .12), 0 30px 70px rgba(0, 0, 0, .75);
+}
+.detailLogo { filter: drop-shadow(0 6px 24px rgba(0, 0, 0, .6)); }
+.itemName.infoText, .parentNameLast { letter-spacing: -.02em; }
+
+/* Boutons d'action ronds en verre */
+.mainDetailButtons { gap: 8px; }
+.mainDetailButtons .detailButton {
+  width: 46px; height: 46px; margin: 0 !important;
+  background: var(--surface-soft) !important;
+  border: 1px solid var(--border);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
-  border-radius: var(--radius);
-  margin-inline: 1em;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease);
 }
-.detailImageContainer .cardScalable { box-shadow: 0 24px 60px rgba(0, 0, 0, .7); }
+.mainDetailButtons .detailButton:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, .12) !important;
+  box-shadow: 0 0 0 1px rgba(var(--glow), .35), 0 6px 20px rgba(var(--glow), .2);
+}
+.mainDetailButtons .btnPlay, .mainDetailButtons .btnResume {
+  background: var(--accent) !important;
+  color: var(--accent-text) !important;
+}
+
+.trackSelections .selectContainer select { border-radius: 999px !important; }
+
+/* ---------- Épisodes (liste d'une saison) ---------- */
+.detailPageContent .listItem,
+.childrenItemsContainer .listItem {
+  margin: 0 0 10px !important;
+  padding: 10px !important;
+  border-radius: var(--radius) !important;
+  background: var(--surface-soft) !important;
+  border: 1px solid rgba(255, 255, 255, .06);
+  transition: background .25s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease);
+}
+.detailPageContent .listItem:hover,
+.childrenItemsContainer .listItem:hover {
+  background: rgba(255, 255, 255, .08) !important;
+  box-shadow: 0 0 0 1px rgba(var(--glow), .3), 0 8px 26px rgba(var(--glow), .14);
+  transform: translateX(4px);
+}
+.listItemImage, .listItemImage-large { border-radius: 16px !important; overflow: hidden; }
+.listItemBodyText:first-child { font-weight: 600; }
+.listItem .itemProgressBar { margin: 0 10px 8px !important; }
 
 /* Apparition en fondu */
 .page { animation: fadeIn .4s var(--ease); }
@@ -132,7 +220,8 @@ body { color: var(--text); }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .skinHeader, .mainDrawer, .actionSheet, .dialog, .videoOsdBottom, .nowPlayingBar {
+  .skinHeader, .MuiAppBar-positionFixed > .MuiToolbar-root, .mainDrawer, .actionSheet, .dialog,
+  .videoOsdBottom, .nowPlayingBar, .mainDetailButtons .detailButton {
     backdrop-filter: none !important;
     background: #16161b !important;
   }
