@@ -1,0 +1,77 @@
+/* Thème Jellyfin — à coller dans Tableau de bord → Branding → Custom CSS.
+   Prévu pour le thème "Dark" de Jellyfin (Paramètres → Affichage). */
+
+:root {
+  --accent: #e5a00d;
+  --accent-glow: rgba(229, 160, 13, .45);
+  --bg: #0b0d12;
+  --surface: rgba(20, 24, 33, .6);
+  --border: rgba(255, 255, 255, .08);
+  --text: #eef1f6;
+  --radius: 12px;
+  --blur: blur(18px) saturate(160%);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+/* Fond */
+body, .backgroundContainer { background: var(--bg) !important; }
+.backdropImage { filter: brightness(.45) saturate(1.1); }
+body { color: var(--text); }
+
+/* Barre du haut et menu latéral en verre dépoli */
+.skinHeader.semiTransparent,
+.skinHeader-withBackground,
+.mainDrawer,
+.actionSheet,
+.dialog,
+.videoOsdBottom {
+  background: var(--surface) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+}
+.actionSheet, .dialog { border-radius: var(--radius); }
+
+/* Affiches */
+.cardScalable, .cardImageContainer, .cardContent { border-radius: var(--radius); }
+.cardBox { transition: transform .3s var(--ease); }
+.card:hover .cardBox, .card:focus-within .cardBox { transform: translateY(-6px) scale(1.03); }
+.card:hover .cardScalable { box-shadow: 0 12px 30px var(--accent-glow); }
+
+/* Couleur d'accent */
+.button-submit, .emby-button.raised.button-submit,
+.itemProgressBarForeground, .playedIndicator, .countIndicator,
+.emby-checkbox:checked + span::before {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.button-flat:hover, a:hover, .navMenuOption-selected,
+.emby-tab-button-active, .emby-tab-button.emby-button-foreground {
+  color: var(--accent) !important;
+}
+.emby-input:focus, .emby-select-withcolor:focus, .emby-textarea:focus {
+  border-color: var(--accent) !important;
+}
+.mdl-slider-background-lower { background: var(--accent) !important; }
+
+/* Boutons arrondis */
+.emby-button.raised, .button-submit { border-radius: 999px; }
+
+/* Page de détail : titre + affiche */
+.detailImageContainer .cardScalable { box-shadow: 0 20px 50px rgba(0, 0, 0, .6); }
+.itemName.infoText { font-weight: 700; letter-spacing: -.02em; }
+
+/* Apparition en fondu */
+.page { animation: fadeIn .4s var(--ease); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } }
+
+/* Respect des préférences système */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .skinHeader, .mainDrawer, .actionSheet, .dialog, .videoOsdBottom {
+    backdrop-filter: none !important;
+    background: #141821 !important;
+  }
+}
