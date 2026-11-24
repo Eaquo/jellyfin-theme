@@ -105,6 +105,14 @@ Exemples de halo : violet `170, 120, 255` · vert `80, 255, 170` · orange `255,
 **Les effets avancés (bandeau, pilules de saisons, couleur dynamique) n'apparaissent pas**
 - Vérifier dans **Tableau de bord → Extensions → JavaScript Injector** que le script est bien **Enabled**, avec l'URL `https://eaquo.github.io/jellyfin-theme/theme.js`.
 - Recharger avec **Ctrl + Maj + R**.
+- Dans le plugin, la case **« Allow external script URLs »** doit être cochée **et enregistrée** (bouton *Save* en bas de la page).
+- **Jellyfin Desktop / Jellyfin Media Player** gardent l'ancienne page en cache (le serveur la déclare inchangée). Fermer l'application, vider son cache, puis la rouvrir :
+  ```bash
+  # Jellyfin Desktop (Flatpak)
+  rm -rf ~/.var/app/org.jellyfin.JellyfinDesktop/cache/jellyfin-desktop/profiles/*/QtWebEngine/Cache
+  # Jellyfin Media Player (paquet classique)
+  rm -rf ~/.local/share/jellyfinmediaplayer/QtWebEngine/Default/Cache
+  ```
 
 **« Une erreur s'est produite lors du chargement des plugins » (page Extensions)**
 
