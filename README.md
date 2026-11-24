@@ -34,16 +34,16 @@ Le CSS seul suffit. Pour aller plus loin, `theme.js` ajoute :
 
 ![Bandeau d'accueil](docs/bandeau.png)
 
-Installation :
+Installation (une seule fois) :
 
-1. Installer le plugin [JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector) (**Tableau de bord → Extensions → Catalogue**, après avoir ajouté son dépôt), puis redémarrer Jellyfin.
-2. Dans **Tableau de bord → Extensions → JavaScript Injector**, ajouter un script avec ce contenu, cocher *Enabled* et enregistrer :
-   ```js
-   const s = document.createElement('script');
-   s.src = 'https://eaquo.github.io/jellyfin-theme/theme.js';
-   document.head.appendChild(s);
-   ```
-3. Recharger la page.
+1. **Tableau de bord → Extensions → Catalogue → ⚙️ → +**, ajouter le dépôt :
+   `https://raw.githubusercontent.com/n00bcodr/jellyfin-plugins/main/manifest.json`
+2. Dans le **Catalogue**, installer **JavaScript Injector**, puis **redémarrer le serveur** Jellyfin.
+3. **Tableau de bord → Extensions → JavaScript Injector → Add Script** :
+   - **Name** : `Dock Theme`
+   - **Script URL** : `https://eaquo.github.io/jellyfin-theme/theme.js`
+   - cocher **Enabled**, puis **Save**.
+4. Recharger la page.
 
 Forcer le mode léger sur un appareil (console du navigateur, F12) : `localStorage.dockLite = '1'` — ou `'0'` pour le désactiver, puis recharger.
 
