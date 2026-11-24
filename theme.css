@@ -1,77 +1,113 @@
-/* Thème Jellyfin — à coller dans Tableau de bord → Branding → Custom CSS.
+/* Thème Jellyfin "Dock" — à importer dans Tableau de bord → Branding → Custom CSS.
    Prévu pour le thème "Dark" de Jellyfin (Paramètres → Affichage). */
 
 :root {
-  --accent: #e5a00d;
-  --accent-glow: rgba(229, 160, 13, .45);
-  --bg: #0b0d12;
-  --surface: rgba(20, 24, 33, .6);
-  --border: rgba(255, 255, 255, .08);
-  --text: #eef1f6;
-  --radius: 12px;
-  --blur: blur(18px) saturate(160%);
+  --accent: #ffffff;
+  --accent-text: #0b0b0e;
+  --bg: #07070a;
+  --surface: rgba(28, 28, 34, .5);
+  --border: rgba(255, 255, 255, .14);
+  --text: #eef0f4;
+  --radius: 22px;
+  --blur: blur(24px) saturate(170%);
+  --shadow: 0 14px 40px rgba(0, 0, 0, .55);
   --ease: cubic-bezier(.2, .8, .2, 1);
 }
 
-/* Fond */
-body, .backgroundContainer { background: var(--bg) !important; }
-.backdropImage { filter: brightness(.45) saturate(1.1); }
+/* Fond très sombre, image de fond assombrie */
+html, body, .backgroundContainer, .skinBody { background: var(--bg) !important; }
+.backdropImage { filter: brightness(.35) saturate(1.1); }
 body { color: var(--text); }
 
-/* Barre du haut et menu latéral en verre dépoli */
-.skinHeader.semiTransparent,
-.skinHeader-withBackground,
-.mainDrawer,
-.actionSheet,
-.dialog,
-.videoOsdBottom {
+/* ---------- Dock flottant (bureau) ---------- */
+.layout-desktop .skinHeader {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 18px !important;
+  left: 50% !important;
+  right: auto !important;
+  width: auto !important;
+  max-width: calc(100vw - 32px);
+  transform: translateX(-50%) !important;
+  padding: 6px 10px !important;
+  border-radius: 999px;
+  background: var(--surface) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12);
+  z-index: 1000;
+}
+.layout-desktop .skinHeader .headerTop { padding: 0 !important; gap: 4px; }
+.layout-desktop .skinHeader .pageTitle { display: none !important; }
+
+/* Onglets et boutons du dock en pilules */
+.layout-desktop .skinHeader .emby-tab-button,
+.layout-desktop .skinHeader .headerButton,
+.layout-desktop .skinHeader .headerTabs a,
+.layout-desktop .skinHeader .headerTabs button {
+  border-radius: 999px !important;
+  margin: 0 2px !important;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.layout-desktop .skinHeader .emby-tab-button:hover,
+.layout-desktop .skinHeader .headerButton:hover,
+.layout-desktop .skinHeader .headerTabs a:hover {
+  background: rgba(255, 255, 255, .12) !important;
+}
+.layout-desktop .skinHeader .emby-tab-button-active,
+.layout-desktop .skinHeader .emby-button-foreground.emby-tab-button-active {
+  background: var(--accent) !important;
+  color: var(--accent-text) !important;
+}
+
+/* Le contenu n'a plus besoin de place en haut, mais en bas */
+.layout-desktop .page { padding-top: 1.5em !important; padding-bottom: 6em !important; }
+
+/* ---------- Surfaces en verre ---------- */
+.mainDrawer, .actionSheet, .dialog, .videoOsdBottom, .nowPlayingBar {
   background: var(--surface) !important;
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   border: 1px solid var(--border);
 }
-.actionSheet, .dialog { border-radius: var(--radius); }
+.actionSheet, .dialog { border-radius: var(--radius) !important; }
+.layout-desktop .nowPlayingBar { bottom: 84px; left: 16px; right: 16px; border-radius: var(--radius); }
 
-/* Affiches */
-.cardScalable, .cardImageContainer, .cardContent { border-radius: var(--radius); }
-.cardBox { transition: transform .3s var(--ease); }
+/* ---------- Affiches ---------- */
+.cardScalable, .cardImageContainer, .cardContent, .cardOverlayContainer { border-radius: var(--radius) !important; }
+.cardBox { transition: transform .35s var(--ease); }
 .card:hover .cardBox, .card:focus-within .cardBox { transform: translateY(-6px) scale(1.03); }
-.card:hover .cardScalable { box-shadow: 0 12px 30px var(--accent-glow); }
+.cardScalable { box-shadow: 0 8px 22px rgba(0, 0, 0, .45); transition: box-shadow .35s var(--ease); }
+.card:hover .cardScalable { box-shadow: 0 18px 40px rgba(0, 0, 0, .7), 0 0 0 1px var(--border); }
+.itemProgressBar { border-radius: 999px; overflow: hidden; margin: 0 12px 10px !important; }
+.itemProgressBarForeground { background: var(--accent) !important; }
 
-/* Couleur d'accent */
-.button-submit, .emby-button.raised.button-submit,
-.itemProgressBarForeground, .playedIndicator, .countIndicator,
-.emby-checkbox:checked + span::before {
+/* ---------- Boutons et champs ---------- */
+.emby-button.raised, .button-submit, .detailButton { border-radius: 999px !important; }
+.button-submit, .emby-button.raised.button-submit {
   background: var(--accent) !important;
-  border-color: var(--accent) !important;
+  color: var(--accent-text) !important;
 }
-.button-flat:hover, a:hover, .navMenuOption-selected,
-.emby-tab-button-active, .emby-tab-button.emby-button-foreground {
-  color: var(--accent) !important;
-}
-.emby-input:focus, .emby-select-withcolor:focus, .emby-textarea:focus {
-  border-color: var(--accent) !important;
+.emby-input, .emby-select-withcolor, .emby-textarea, .searchFieldsInner input {
+  border-radius: 14px !important;
 }
 .mdl-slider-background-lower { background: var(--accent) !important; }
 
-/* Boutons arrondis */
-.emby-button.raised, .button-submit { border-radius: 999px; }
-
-/* Page de détail : titre + affiche */
-.detailImageContainer .cardScalable { box-shadow: 0 20px 50px rgba(0, 0, 0, .6); }
-.itemName.infoText { font-weight: 700; letter-spacing: -.02em; }
+/* ---------- Page de détail ---------- */
+.detailImageContainer .cardScalable { box-shadow: 0 24px 60px rgba(0, 0, 0, .7); }
 
 /* Apparition en fondu */
 .page { animation: fadeIn .4s var(--ease); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } }
 
-/* Respect des préférences système */
+/* Préférences système */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .skinHeader, .mainDrawer, .actionSheet, .dialog, .videoOsdBottom {
+  .skinHeader, .mainDrawer, .actionSheet, .dialog, .videoOsdBottom, .nowPlayingBar {
     backdrop-filter: none !important;
-    background: #141821 !important;
+    background: #16161b !important;
   }
 }

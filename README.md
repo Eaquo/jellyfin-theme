@@ -1,6 +1,6 @@
 # Jellyfin Theme
 
-Thème sombre pour Jellyfin : verre dépoli, affiches arrondies qui s'illuminent au survol, accent doré.
+Thème très sombre pour Jellyfin : navigation dans un dock de verre flottant en bas de l'écran, affiches arrondies qui se soulèvent au survol.
 
 ## Installation
 
@@ -19,7 +19,7 @@ Ajouter sous la ligne `@import` pour changer les couleurs :
 
 ```css
 :root {
-  --accent: #e5a00d;
+  --accent: #ffffff;
   --radius: 12px;
 }
 ```
