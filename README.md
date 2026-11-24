@@ -102,6 +102,27 @@ Exemples de halo : violet `170, 120, 255` · vert `80, 255, 170` · orange `255,
 **Une mise à jour du thème n'apparaît pas**
 - Le fichier peut rester en cache jusqu'à 10 minutes. Recharger avec **Ctrl + Maj + R**.
 
+**Les effets avancés (bandeau, pilules de saisons, couleur dynamique) n'apparaissent pas**
+- Vérifier dans **Tableau de bord → Extensions → JavaScript Injector** que le script est bien **Enabled**, avec l'URL `https://eaquo.github.io/jellyfin-theme/theme.js`.
+- Recharger avec **Ctrl + Maj + R**.
+
+**« Une erreur s'est produite lors du chargement des plugins » (page Extensions)**
+
+Ce n'est pas lié au thème : la page plante à cause d'un autre dépôt ou plugin. Ouvrir **Tableau de bord → Journaux**, le fichier le plus récent, et chercher :
+
+- `Failed to deserialize the plugin manifest retrieved from "…"` : ce dépôt est mort ou archivé. Le supprimer dans **Extensions → Gérer les dépôts**.
+- `Could not find a part of the path '/var/lib/jellyfin/plugins/<Nom>_<version>/meta.json'` : Jellyfin croit un plugin installé alors que son dossier a disparu. Sur le serveur :
+  ```bash
+  ls -la /var/lib/jellyfin/plugins/
+  # si le dossier manque : le recréer pour débloquer la page, puis réinstaller le plugin depuis le Catalogue
+  sudo mkdir -p "/var/lib/jellyfin/plugins/<Nom>_<version>"
+  sudo chown -R jellyfin:jellyfin "/var/lib/jellyfin/plugins/<Nom>_<version>"
+  sudo systemctl restart jellyfin
+  ```
+  Si le plugin n'est plus utile, supprimer plutôt le dépôt qui le propose, puis redémarrer Jellyfin.
+
+(Installation Docker : le dossier `plugins` se trouve dans le volume monté sur `/config`, et on redémarre le conteneur au lieu de `systemctl`.)
+
 ---
 
 ## Désinstaller
