@@ -289,6 +289,18 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
   border: 1px solid rgba(255, 255, 255, .06);
   transition: background .25s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease), opacity .25s var(--ease);
 }
+/* Certaines versions enveloppent image + texte dans .listItem-content : on l'empile aussi */
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItem-content {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch !important;
+  width: 100%;
+}
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItemBody { width: 100%; min-width: 0; }
+/* Bouton lecture sur l'image : seulement au survol */
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItemImageButton { opacity: 0; transition: opacity .25s var(--ease); }
+#listChildrenCollapsible .listItem[data-type="Episode"]:hover .listItemImageButton,
+#listChildrenCollapsible .listItem[data-type="Episode"]:focus-within .listItemImageButton { opacity: 1; }
 #listChildrenCollapsible .listItem[data-type="Episode"] .listItemImage {
   position: relative;
   width: 100% !important;
@@ -619,6 +631,7 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader),
   /* Pas de survol sur tactile/TV : résumé et boutons toujours visibles */
   #listChildrenCollapsible .listItem[data-type="Episode"] .listItem-overview { max-height: 7em; opacity: .8; margin-top: 6px; -webkit-line-clamp: 3; }
   #listChildrenCollapsible .listItem[data-type="Episode"] .listViewUserDataButtons { opacity: 1; }
+  #listChildrenCollapsible .listItem[data-type="Episode"] .listItemImageButton { opacity: 1; }
 }
 
 /* TV : barre en haut d'origine (navigation à la télécommande), en verre ;
