@@ -23,6 +23,28 @@ C'est tout : le thème s'applique à tous les utilisateurs et à toutes les appl
 
 Recommandé : choisir le thème **Dark** dans **Paramètres → Affichage**.
 
+### Option : effets avancés (JavaScript)
+
+Le CSS seul suffit. Pour aller plus loin, `theme.js` ajoute :
+
+- **Couleur dynamique** : le halo et les lueurs prennent la couleur dominante de l'affiche ouverte.
+- **Bandeau d'accueil** : les derniers ajouts défilent en grand en haut de l'accueil, avec leur logo et leur résumé.
+- **Pilules de saisons** : une rangée `S1 · S2 · S3` sur les pages de série et de saison pour changer de saison d'un clic.
+- **Mode léger automatique** : sur un appareil lent, le flou est remplacé par une teinte simple pour rester fluide.
+
+Installation :
+
+1. Installer le plugin [JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector) (**Tableau de bord → Extensions → Catalogue**, après avoir ajouté son dépôt), puis redémarrer Jellyfin.
+2. Dans **Tableau de bord → Extensions → JavaScript Injector**, ajouter un script avec ce contenu, cocher *Enabled* et enregistrer :
+   ```js
+   const s = document.createElement('script');
+   s.src = 'https://eaquo.github.io/jellyfin-theme/theme.js';
+   document.head.appendChild(s);
+   ```
+3. Recharger la page.
+
+Forcer le mode léger sur un appareil (console du navigateur, F12) : `localStorage.dockLite = '1'` — ou `'0'` pour le désactiver, puis recharger.
+
 ---
 
 ## Ce que fait le thème

@@ -449,6 +449,138 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .18) transpar
   outline-offset: 2px;
 }
 
+/* ---------- theme.js (optionnel) ---------- */
+
+/* Bandeau d'accueil */
+.dockHero {
+  position: relative;
+  height: min(62vh, 640px);
+  margin: 0 3.3% 2em;
+  border-radius: calc(var(--radius) + 8px);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--border), 0 30px 80px rgba(0, 0, 0, .6);
+}
+.dockHeroSlide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center 25%;
+  color: #fff !important;
+  text-decoration: none !important;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1s var(--ease), transform 8s linear;
+  pointer-events: none;
+}
+.dockHeroSlide.active { opacity: 1; transform: scale(1); pointer-events: auto; }
+.dockHeroSlide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(7, 7, 10, .85) 0%, rgba(7, 7, 10, .35) 45%, transparent 70%),
+    linear-gradient(0deg, rgba(7, 7, 10, .9) 0%, transparent 50%);
+}
+.dockHeroInfo { position: relative; max-width: min(560px, 90%); padding: 0 0 3.2em 3em; }
+.dockHeroLogo { display: block; max-width: 380px; max-height: 140px; margin-bottom: .8em; filter: drop-shadow(0 6px 20px rgba(0, 0, 0, .6)); }
+.dockHeroTitle { font-size: 2.6em; margin: 0 0 .3em; letter-spacing: -.02em; }
+.dockHeroMeta { opacity: .75; font-size: .95em; margin-bottom: .6em; }
+.dockHeroOverview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  margin: 0 0 1.2em;
+  line-height: 1.5;
+  opacity: .9;
+}
+.dockHeroButton {
+  display: inline-block;
+  padding: .6em 1.8em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+  transition: box-shadow .25s var(--ease), transform .25s var(--ease);
+}
+.dockHeroSlide:hover .dockHeroButton { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(var(--glow), .5), 0 8px 24px rgba(var(--glow), .35); }
+.dockHeroDots {
+  position: absolute;
+  right: 1.6em;
+  bottom: 1.6em;
+  display: flex;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(10, 10, 14, .45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+.dockHeroDots button {
+  width: 8px; height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .35);
+  cursor: pointer;
+  transition: width .35s var(--ease), background .35s var(--ease);
+}
+.dockHeroDots button.active { width: 26px; background: #fff; }
+
+/* Pilules de saisons */
+.dockSeasonPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 1.2em;
+}
+.dockSeasonPills a {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background .25s var(--ease), box-shadow .25s var(--ease);
+}
+.dockSeasonPills a:hover, .dockSeasonPills a:focus-visible {
+  background: rgba(255, 255, 255, .1);
+  box-shadow: 0 0 0 1px rgba(var(--glow), .45), 0 4px 18px rgba(var(--glow), .2);
+}
+.dockSeasonPills a.played { opacity: .5; }
+.dockSeasonPills a.current {
+  opacity: 1;
+  background: rgb(var(--glow));
+  border-color: transparent;
+  color: #07070a !important;
+  box-shadow: 0 0 24px rgba(var(--glow), .45);
+}
+
+/* Mode léger : pas de flou ni d'effets coûteux (activé par theme.js sur les appareils lents) */
+.dock-lite *, .dock-lite *::before, .dock-lite *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.dock-lite {
+  --surface: rgba(22, 22, 28, .92);
+  --shadow: 0 6px 16px rgba(0, 0, 0, .5);
+}
+.dock-lite .cardScalable::after { display: none; }
+.dock-lite .cardBox, .dock-lite .cardScalable, .dock-lite .dockHeroSlide { transition: none !important; }
+
+@media (max-width: 700px) {
+  .dockHero { height: 56vh; margin-inline: 12px; }
+  .dockHeroInfo { padding: 0 1.2em 3.6em; }
+  .dockHeroLogo { max-width: 220px; max-height: 90px; }
+  .dockHeroTitle { font-size: 1.8em; }
+  .dockHeroDots { right: 50%; transform: translateX(50%); bottom: 1em; }
+}
+.dock-lite .page { animation: none !important; }
+
 /* ---------- Adaptation aux écrans ---------- */
 
 /* Le dock reste au-dessus de la barre système des téléphones (iPhone, Android gestuel) */
