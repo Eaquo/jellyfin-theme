@@ -20,7 +20,7 @@ html, body, .backgroundContainer, .skinBody { background: var(--bg) !important; 
 body { color: var(--text); }
 
 /* ---------- Dock flottant (bureau) ---------- */
-.layout-desktop .skinHeader {
+.skinHeader:not(.osdHeader) {
   position: fixed !important;
   top: auto !important;
   bottom: 18px !important;
@@ -38,31 +38,31 @@ body { color: var(--text); }
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12);
   z-index: 1000;
 }
-.layout-desktop .skinHeader .headerTop { padding: 0 !important; gap: 4px; }
-.layout-desktop .skinHeader .pageTitle { display: none !important; }
+.skinHeader:not(.osdHeader) .headerTop { padding: 0 !important; gap: 4px; }
+.skinHeader:not(.osdHeader) .pageTitle { display: none !important; }
 
 /* Onglets et boutons du dock en pilules */
-.layout-desktop .skinHeader .emby-tab-button,
-.layout-desktop .skinHeader .headerButton,
-.layout-desktop .skinHeader .headerTabs a,
-.layout-desktop .skinHeader .headerTabs button {
+.skinHeader:not(.osdHeader) .emby-tab-button,
+.skinHeader:not(.osdHeader) .headerButton,
+.skinHeader:not(.osdHeader) .headerTabs a,
+.skinHeader:not(.osdHeader) .headerTabs button {
   border-radius: 999px !important;
   margin: 0 2px !important;
   transition: background .25s var(--ease), color .25s var(--ease);
 }
-.layout-desktop .skinHeader .emby-tab-button:hover,
-.layout-desktop .skinHeader .headerButton:hover,
-.layout-desktop .skinHeader .headerTabs a:hover {
+.skinHeader:not(.osdHeader) .emby-tab-button:hover,
+.skinHeader:not(.osdHeader) .headerButton:hover,
+.skinHeader:not(.osdHeader) .headerTabs a:hover {
   background: rgba(255, 255, 255, .12) !important;
 }
-.layout-desktop .skinHeader .emby-tab-button-active,
-.layout-desktop .skinHeader .emby-button-foreground.emby-tab-button-active {
+.skinHeader:not(.osdHeader) .emby-tab-button-active,
+.skinHeader:not(.osdHeader) .emby-button-foreground.emby-tab-button-active {
   background: var(--accent) !important;
   color: var(--accent-text) !important;
 }
 
 /* Le contenu n'a plus besoin de place en haut, mais en bas */
-.layout-desktop .page { padding-top: 1.5em !important; padding-bottom: 6em !important; }
+.page { padding-top: 1.5em !important; padding-bottom: 6em !important; }
 
 /* ---------- Surfaces en verre ---------- */
 .mainDrawer, .actionSheet, .dialog, .videoOsdBottom, .nowPlayingBar {
@@ -72,7 +72,7 @@ body { color: var(--text); }
   border: 1px solid var(--border);
 }
 .actionSheet, .dialog { border-radius: var(--radius) !important; }
-.layout-desktop .nowPlayingBar { bottom: 84px; left: 16px; right: 16px; border-radius: var(--radius); }
+.nowPlayingBar { bottom: 84px; left: 16px; right: 16px; border-radius: var(--radius); }
 
 /* ---------- Affiches ---------- */
 .cardScalable, .cardImageContainer, .cardContent, .cardOverlayContainer { border-radius: var(--radius) !important; }
