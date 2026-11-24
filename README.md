@@ -31,6 +31,8 @@ Le CSS seul suffit. Pour aller plus loin, `theme.js` ajoute :
 - **Bandeau d'accueil** : les derniers ajouts défilent en grand en haut de l'accueil, avec leur logo et leur résumé.
 - **Pilules de saisons** : une rangée `S1 · S2 · S3` sur les pages de série et de saison pour changer de saison d'un clic.
 - **Mode léger automatique** : sur un appareil lent, le flou est remplacé par une teinte simple pour rester fluide.
+- **Surprends-moi** : un dé dans le dock tire au hasard un film ou une série pas encore vus.
+- **Badges** : `4K`, `HDR`/`DV`, `VF` ou `VOSTFR` sur les affiches des films et épisodes.
 
 ![Bandeau d'accueil](docs/bandeau.png)
 

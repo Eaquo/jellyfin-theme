@@ -572,6 +572,117 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .18) transpar
   box-shadow: 0 0 24px rgba(var(--glow), .45);
 }
 
+/* Bouton dé « Surprends-moi » dans le dock */
+.dockDice {
+  display: inline-grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  margin: 0 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background .25s var(--ease), transform .4s var(--ease);
+}
+.dockDice:hover { background: rgba(255, 255, 255, .12); transform: rotate(90deg) scale(1.1); }
+.dockDice:focus-visible { outline: 2px solid rgba(var(--glow), .85); outline-offset: 2px; }
+
+/* Fenêtre « Surprends-moi » */
+.dockSurprise {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn .3s var(--ease);
+}
+.dockSurpriseCard {
+  display: flex;
+  gap: 1.6em;
+  align-items: center;
+  width: min(760px, 100%);
+  padding: 1.4em;
+  border-radius: calc(var(--radius) + 8px);
+  background: rgba(18, 18, 24, .82);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 1px rgba(var(--glow), .25), 0 0 80px rgba(var(--glow), .25), var(--shadow);
+  transition: box-shadow .6s var(--ease);
+}
+.dockSurprisePoster {
+  width: 220px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .6);
+}
+.dockSurprise.revealed .dockSurprisePoster { animation: dockPop .5s var(--ease); }
+@keyframes dockPop { 50% { transform: scale(1.06); } }
+.dockSurpriseInfo { opacity: 0; transform: translateY(8px); transition: opacity .4s var(--ease), transform .4s var(--ease); }
+.dockSurprise.revealed .dockSurpriseInfo { opacity: 1; transform: none; }
+.dockSurpriseInfo h2 { margin: 0 0 .3em; font-size: 1.8em; letter-spacing: -.02em; }
+.dockSurpriseMeta { margin: 0 0 .8em; opacity: .7; }
+.dockSurpriseOverview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  overflow: hidden;
+  margin: 0 0 1.2em;
+  line-height: 1.5;
+  opacity: .9;
+}
+.dockSurpriseActions { display: flex; gap: 10px; }
+.dockSurpriseActions a, .dockSurpriseActions button {
+  padding: .6em 1.6em;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+.dockSurpriseGo { background: var(--accent); color: var(--accent-text) !important; }
+.dockSurpriseAgain { background: rgba(255, 255, 255, .08); color: var(--text); border: 1px solid var(--border); }
+.dockSurpriseAgain:hover { background: rgba(255, 255, 255, .14); }
+@media (max-width: 700px) {
+  .dockSurpriseCard { flex-direction: column; text-align: center; }
+  .dockSurprisePoster { width: 160px; }
+  .dockSurpriseActions { justify-content: center; }
+}
+
+/* Badges 4K / HDR / VF / VOSTFR sur les affiches */
+.dockBadges {
+  position: absolute;
+  top: 8px; left: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+}
+.dockBadges span {
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: .66em;
+  font-weight: 700;
+  letter-spacing: .03em;
+  line-height: 1.5;
+  color: #fff;
+  background: rgba(10, 10, 14, .62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, .16);
+}
+.dockBadges .dockBadge-uhd { border-color: rgba(var(--glow), .6); }
+.dockBadges .dockBadge-hdr {
+  background: linear-gradient(90deg, rgba(255, 170, 60, .85), rgba(255, 80, 140, .85));
+  border-color: transparent;
+}
+
 /* Mode léger : pas de flou ni d'effets coûteux (activé par theme.js sur les appareils lents) */
 .dock-lite *, .dock-lite *::before, .dock-lite *::after {
   backdrop-filter: none !important;

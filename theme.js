@@ -175,6 +175,125 @@
     }
   }
 
+  /* ---------- « Surprends-moi » ---------- */
+  const detailsHref = id => `#/details?id=${id}&serverId=${api().serverId()}`;
+
+  function ensureDiceButton() {
+    if (document.querySelector('.dockDice')) return;
+    const bar = document.querySelector('.MuiAppBar-positionFixed > .MuiToolbar-root:not(.padded-left)')
+      || document.querySelector('html:not(.layout-tv) .skinHeader .headerRight');
+    if (!bar || !bar.lastElementChild) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dockDice';
+    btn.title = 'Surprends-moi';
+    btn.setAttribute('aria-label', 'Surprends-moi');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.6" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.6" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.6" fill="currentColor"/></svg>';
+    btn.addEventListener('click', () => surprise().catch(() => {}));
+    bar.lastElementChild.before(btn);
+  }
+
+  async function surprise() {
+    document.querySelector('.dockSurprise')?.remove();
+    const res = await api().getItems(api().getCurrentUserId(), {
+      SortBy: 'Random', Recursive: true, IncludeItemTypes: 'Movie,Series',
+      IsPlayed: false, ImageTypes: 'Primary', Fields: 'Overview', Limit: 14
+    });
+    const items = res.Items || [];
+    if (!items.length) return;
+    const posters = items.map(i => api().getImageUrl(i.Id, { type: 'Primary', maxWidth: 400, tag: i.ImageTags.Primary }));
+    // Précharge les affiches pour que le défilement ne clignote pas
+    await Promise.all(posters.map(src => new Promise(r => { const im = new Image(); im.onload = im.onerror = r; im.src = src; })));
+
+    const overlay = document.createElement('div');
+    overlay.className = 'dockSurprise';
+    overlay.innerHTML = '<div class="dockSurpriseCard" role="dialog" aria-label="Surprends-moi"><img class="dockSurprisePoster" alt=""><div class="dockSurpriseInfo"><h2></h2><p class="dockSurpriseMeta"></p><p class="dockSurpriseOverview"></p><div class="dockSurpriseActions"><a class="dockSurpriseGo">Voir</a><button type="button" class="dockSurpriseAgain">Encore</button></div></div></div>';
+    const img = overlay.querySelector('img');
+    const close = () => { overlay.remove(); document.removeEventListener('keydown', onKey); };
+    const onKey = e => { if (e.key === 'Escape') close(); };
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    overlay.querySelector('.dockSurpriseAgain').addEventListener('click', () => { close(); surprise().catch(() => {}); });
+    overlay.querySelector('.dockSurpriseGo').addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(overlay);
+
+    // Les affiches défilent de plus en plus lentement, puis s'arrêtent sur la dernière
+    const pick = items[items.length - 1];
+    let step = reducedMotion ? items.length - 1 : 0;
+    await new Promise(done => {
+      const next = () => {
+        img.src = posters[step];
+        if (step === items.length - 1) return done();
+        step++;
+        setTimeout(next, 60 + step * step * 2.2);
+      };
+      next();
+    });
+    overlay.querySelector('h2').textContent = pick.Name;
+    overlay.querySelector('.dockSurpriseMeta').textContent = [pick.ProductionYear, pick.Type === 'Series' ? 'Série' : 'Film', pick.OfficialRating].filter(Boolean).join(' · ');
+    overlay.querySelector('.dockSurpriseOverview').textContent = pick.Overview || '';
+    overlay.querySelector('.dockSurpriseGo').href = detailsHref(pick.Id);
+    overlay.classList.add('revealed');
+    applyColorFrom(posters[items.length - 1], overlay);
+  }
+
+  // Le halo de la fenêtre prend la couleur de l'affiche tirée
+  async function applyColorFrom(url, el) {
+    const rgb = await dominantColor(url);
+    if (rgb) el.style.setProperty('--glow', rgb);
+  }
+
+  /* ---------- Badges 4K / HDR / VF / VOSTFR ---------- */
+  const badgeCache = {};
+  const FR = ['fre', 'fra', 'fr', 'french'];
+
+  function badgesFor(item) {
+    const streams = item.MediaStreams || [];
+    const video = streams.find(s => s.Type === 'Video');
+    const audioFr = streams.some(s => s.Type === 'Audio' && FR.includes((s.Language || '').toLowerCase()));
+    const subFr = streams.some(s => s.Type === 'Subtitle' && FR.includes((s.Language || '').toLowerCase()));
+    const out = [];
+    if (video && (video.Width >= 3800 || video.Height >= 2100)) out.push(['4K', 'uhd']);
+    if (video && video.VideoRange && video.VideoRange !== 'SDR') out.push([video.VideoRangeType && video.VideoRangeType.startsWith('DOVI') ? 'DV' : 'HDR', 'hdr']);
+    if (audioFr) out.push(['VF', 'lang']);
+    else if (subFr) out.push(['VOSTFR', 'lang']);
+    return out;
+  }
+
+  function paintBadges(card, list) {
+    const box = card.querySelector('.cardScalable');
+    if (!box || !list.length || box.querySelector('.dockBadges')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'dockBadges';
+    for (const [label, kind] of list) {
+      const b = document.createElement('span');
+      b.className = 'dockBadge-' + kind;
+      b.textContent = label;
+      wrap.appendChild(b);
+    }
+    box.appendChild(wrap);
+  }
+
+  let badgeBusy = false;
+  async function scanBadges() {
+    if (badgeBusy) return;
+    const cards = [...document.querySelectorAll('.card[data-id]:not([data-dock-badged])')]
+      .filter(c => c.dataset.type === 'Movie' || c.dataset.type === 'Episode');
+    if (!cards.length) return;
+    cards.forEach(c => { c.dataset.dockBadged = '1'; });
+
+    const missing = [...new Set(cards.map(c => c.dataset.id).filter(id => !(id in badgeCache)))].slice(0, 80);
+    if (missing.length) {
+      badgeBusy = true;
+      try {
+        const res = await api().getItems(api().getCurrentUserId(), { Ids: missing.join(','), Fields: 'MediaStreams' });
+        for (const it of res.Items || []) badgeCache[it.Id] = badgesFor(it);
+        missing.forEach(id => { if (!(id in badgeCache)) badgeCache[id] = []; });
+      } finally { badgeBusy = false; }
+    }
+    cards.forEach(c => paintBadges(c, badgeCache[c.dataset.id] || []));
+  }
+
   /* ---------- Routage ----------
      Jellyfin change de page sans recharger : on surveille l'adresse et on réessaie tant que
      les éléments de la page ne sont pas encore affichés. */
@@ -213,5 +332,8 @@
     if (location.href !== lastHref) { lastHref = location.href; tries = 0; }
     // Quelques passages après chaque changement de page, le temps que Jellyfin affiche le contenu
     if (tries++ < 12) onRoute().catch(() => {});
+    if (!api() || !api().getCurrentUserId()) return;
+    ensureDiceButton();
+    scanBadges().catch(() => {});
   }, 500);
 })();
