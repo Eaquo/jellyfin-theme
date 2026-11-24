@@ -18,6 +18,13 @@
 
 /* Fond très sombre, image de fond assombrie */
 html, body, .skinBody { background: var(--bg) !important; }
+/* Pendant la lecture, Jellyfin rend la page transparente pour laisser voir la vidéo derrière :
+   aucun fond ne doit la masquer */
+.transparentDocument, .transparentDocument body, .transparentDocument .skinBody,
+.transparentDocument .backgroundContainer, .transparentDocument .backgroundContainer.withBackdrop {
+  background: none !important;
+  background-color: transparent !important;
+}
 /* Sans image de fond : lueurs cyan et violette très discrètes, pour que le verre ait de la matière */
 .backgroundContainer {
   background:
