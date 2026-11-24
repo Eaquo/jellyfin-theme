@@ -7,7 +7,7 @@ Thème très sombre pour Jellyfin : navigation dans un dock de verre flottant en
 1. Dans Jellyfin, ouvrir **Tableau de bord → Branding**.
 2. Coller cette ligne **tout en haut** de **Custom CSS code** :
    ```css
-   @import url("https://cdn.jsdelivr.net/gh/Eaquo/jellyfin-theme@main/theme.css");
+   @import url("https://eaquo.github.io/jellyfin-theme/theme.css");
    ```
 3. **Enregistrer**, puis recharger la page.
 
