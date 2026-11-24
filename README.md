@@ -32,6 +32,8 @@ Le CSS seul suffit. Pour aller plus loin, `theme.js` ajoute :
 - **Pilules de saisons** : une rangée `S1 · S2 · S3` sur les pages de série et de saison pour changer de saison d'un clic.
 - **Mode léger automatique** : sur un appareil lent, le flou est remplacé par une teinte simple pour rester fluide.
 
+![Bandeau d'accueil](docs/bandeau.png)
+
 Installation :
 
 1. Installer le plugin [JavaScript Injector](https://github.com/n00bcodr/Jellyfin-JavaScript-Injector) (**Tableau de bord → Extensions → Catalogue**, après avoir ajouté son dépôt), puis redémarrer Jellyfin.
