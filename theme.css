@@ -455,7 +455,7 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .18) transpar
 .dockHero {
   position: relative;
   height: min(62vh, 640px);
-  margin: 1.2em 3.3% 2em;
+  margin: 2.5em 3.3% 2em;
   border-radius: calc(var(--radius) + 8px);
   overflow: hidden;
   box-shadow: 0 0 0 1px var(--border), 0 30px 80px rgba(0, 0, 0, .6);
