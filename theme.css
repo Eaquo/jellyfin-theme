@@ -19,8 +19,10 @@ html, body, .backgroundContainer, .skinBody { background: var(--bg) !important; 
 .backdropImage { filter: brightness(.35) saturate(1.1); }
 body { color: var(--text); }
 
-/* ---------- Dock flottant (bureau) ---------- */
-.skinHeader:not(.osdHeader) {
+/* ---------- Dock flottant ----------
+   .skinHeader = mise en page classique, .MuiAppBar-positionFixed = nouvelle mise en page */
+.skinHeader:not(.osdHeader),
+.MuiAppBar-positionFixed:not(.dashboard-appBar) {
   position: fixed !important;
   top: auto !important;
   bottom: 18px !important;
@@ -30,33 +32,41 @@ body { color: var(--text); }
   max-width: calc(100vw - 32px);
   transform: translateX(-50%) !important;
   padding: 6px 10px !important;
-  border-radius: 999px;
+  border-radius: 999px !important;
   background: var(--surface) !important;
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12);
-  z-index: 1000;
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, .12) !important;
+  z-index: 1100;
 }
+/* Bloc vide qui réservait la hauteur de la barre en haut */
+.MuiAppBar-positionFixed + div[aria-hidden="true"] { height: 0 !important; }
+.MuiAppBar-positionFixed .MuiToolbar-root { min-height: 0 !important; padding: 0 !important; gap: 4px; }
+.MuiAppBar-positionFixed .MuiToolbar-root > .MuiBox-root[style*="flex-grow"],
+.MuiAppBar-positionFixed .MuiToolbar-root > div:empty { display: none; }
 .skinHeader:not(.osdHeader) .headerTop { padding: 0 !important; gap: 4px; }
 .skinHeader:not(.osdHeader) .pageTitle { display: none !important; }
 
-/* Onglets et boutons du dock en pilules */
+/* Boutons du dock en pilules */
+.MuiAppBar-positionFixed .MuiButton-root,
+.MuiAppBar-positionFixed .MuiIconButton-root,
 .skinHeader:not(.osdHeader) .emby-tab-button,
-.skinHeader:not(.osdHeader) .headerButton,
-.skinHeader:not(.osdHeader) .headerTabs a,
-.skinHeader:not(.osdHeader) .headerTabs button {
+.skinHeader:not(.osdHeader) .headerButton {
   border-radius: 999px !important;
   margin: 0 2px !important;
+  padding-inline: 14px !important;
   transition: background .25s var(--ease), color .25s var(--ease);
 }
+.MuiAppBar-positionFixed .MuiIconButton-root { padding: 8px !important; }
+.MuiAppBar-positionFixed .MuiButton-root:hover,
+.MuiAppBar-positionFixed .MuiIconButton-root:hover,
 .skinHeader:not(.osdHeader) .emby-tab-button:hover,
-.skinHeader:not(.osdHeader) .headerButton:hover,
-.skinHeader:not(.osdHeader) .headerTabs a:hover {
+.skinHeader:not(.osdHeader) .headerButton:hover {
   background: rgba(255, 255, 255, .12) !important;
 }
-.skinHeader:not(.osdHeader) .emby-tab-button-active,
-.skinHeader:not(.osdHeader) .emby-button-foreground.emby-tab-button-active {
+.MuiAppBar-positionFixed .MuiButton-colorPrimary,
+.skinHeader:not(.osdHeader) .emby-tab-button-active {
   background: var(--accent) !important;
   color: var(--accent-text) !important;
 }
