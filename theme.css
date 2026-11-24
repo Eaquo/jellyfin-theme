@@ -17,8 +17,19 @@
 }
 
 /* Fond très sombre, image de fond assombrie */
-html, body, .backgroundContainer, .skinBody { background: var(--bg) !important; }
-.backdropImage { filter: brightness(.4) saturate(1.1); }
+html, body, .skinBody { background: var(--bg) !important; }
+/* Sans image de fond : lueurs cyan et violette très discrètes, pour que le verre ait de la matière */
+.backgroundContainer {
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 0%, rgba(var(--glow), .07), transparent 70%),
+    radial-gradient(ellipse 50% 45% at 95% 100%, rgba(140, 90, 255, .06), transparent 70%),
+    var(--bg) !important;
+}
+/* Avec image de fond (pages de détail) : l'image reste visible en haut et se fond dans le noir */
+.backgroundContainer.withBackdrop {
+  background: linear-gradient(180deg, rgba(7, 7, 10, .35) 0%, rgba(7, 7, 10, .75) 45%, var(--bg) 85%) !important;
+}
+.backdropImage { filter: brightness(.55) saturate(1.15); }
 body { color: var(--text); }
 
 /* ---------- Dock flottant ----------
@@ -369,6 +380,74 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
 /* Cartes d'épisodes ailleurs (« Plus de saison ») : vus atténués */
 .card[data-type="Episode"]:has(.playedIndicator) .cardBox { opacity: .55; transition: opacity .25s var(--ease); }
 .card[data-type="Episode"]:has(.playedIndicator):hover .cardBox { opacity: 1; }
+
+
+/* ---------- Petits plaisirs ---------- */
+
+/* Reflet de verre qui traverse l'affiche au survol */
+.cardScalable { position: relative; }
+.cardScalable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .16) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+.card:hover .cardScalable::after { transform: translateX(120%); transition: transform .9s var(--ease); }
+
+/* Barres de progression : du blanc vers le cyan, avec une lueur */
+.itemProgressBarForeground {
+  background: linear-gradient(90deg, #fff, rgb(var(--glow))) !important;
+  box-shadow: 0 0 10px rgba(var(--glow), .6);
+}
+
+/* Dock : l'icône survolée grandit un peu, façon dock macOS */
+.MuiAppBar-positionFixed .MuiButton-startIcon,
+.MuiAppBar-positionFixed .MuiIconButton-root > svg,
+.skinHeader:not(.osdHeader) .headerButton .material-icons {
+  transition: transform .25s var(--ease);
+}
+.MuiAppBar-positionFixed .MuiButton-root:hover .MuiButton-startIcon,
+.MuiAppBar-positionFixed .MuiIconButton-root:hover > svg,
+.skinHeader:not(.osdHeader) .headerButton:hover .material-icons {
+  transform: translateY(-2px) scale(1.18);
+}
+
+/* Titres de section plus nets */
+.sectionTitle { font-weight: 600 !important; letter-spacing: -.01em; }
+
+/* Lecteur vidéo : barre de lecture cyan, boutons ronds */
+.videoOsdBottom { border-radius: var(--radius) var(--radius) 0 0; }
+.videoOsdBottom .mdl-slider-background-lower { background: linear-gradient(90deg, #fff, rgb(var(--glow))) !important; }
+.videoOsdBottom .paper-icon-button-light { border-radius: 999px; }
+.videoOsdBottom .paper-icon-button-light:hover { background: rgba(255, 255, 255, .1) !important; }
+
+/* Page de connexion : formulaire dans une carte de verre */
+#loginPage .readOnlyContent, #loginPage .manualLoginForm, #loginPage .visualLoginForm {
+  padding: 2em !important;
+  border-radius: var(--radius);
+  background: var(--surface) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Barres de défilement fines et discrètes */
+html { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, .18) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .18); border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Sélection de texte et navigation au clavier en cyan */
+::selection { background: rgba(var(--glow), .35); }
+.emby-button:focus-visible, .MuiButtonBase-root:focus-visible, a:focus-visible, .paper-icon-button-light:focus-visible {
+  outline: 2px solid rgba(var(--glow), .85) !important;
+  outline-offset: 2px;
+}
 
 /* ---------- Adaptation aux écrans ---------- */
 
