@@ -191,25 +191,144 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
 
 .trackSelections .selectContainer select { border-radius: 999px !important; }
 
-/* ---------- Épisodes (liste d'une saison) ---------- */
-.detailPageContent .listItem,
-.childrenItemsContainer .listItem {
-  margin: 0 0 10px !important;
+/* ---------- Saisons en pilules (page d'une série) ---------- */
+#listChildrenCollapsible .itemsContainer:has(> .card[data-type="Season"]) {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-block: 6px;
+}
+#listChildrenCollapsible .card[data-type="Season"] { width: auto !important; margin: 0 !important; }
+#listChildrenCollapsible .card[data-type="Season"] .cardScalable { display: none; }
+#listChildrenCollapsible .card[data-type="Season"] .cardBox { transform: none !important; margin: 0 !important; }
+#listChildrenCollapsible .card[data-type="Season"] .cardFooter {
+  padding: 8px 18px !important;
+  border-radius: 999px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  transition: background .25s var(--ease), box-shadow .25s var(--ease);
+}
+#listChildrenCollapsible .card[data-type="Season"] .cardText { padding: 0 !important; font-weight: 600; }
+#listChildrenCollapsible .card[data-type="Season"] .cardText-secondary { display: none; }
+#listChildrenCollapsible .card[data-type="Season"]:hover .cardFooter,
+#listChildrenCollapsible .card[data-type="Season"]:focus-within .cardFooter {
+  background: rgba(255, 255, 255, .1);
+  box-shadow: 0 0 0 1px rgba(var(--glow), .4), 0 4px 18px rgba(var(--glow), .18);
+}
+/* Saison entièrement vue : pilule atténuée */
+#listChildrenCollapsible .card[data-type="Season"]:has(.playedIndicator) .cardFooter { opacity: .5; }
+
+/* ---------- Épisodes en grille (page d'une saison) ---------- */
+#listChildrenCollapsible .itemsContainer:has(> .listItem[data-type="Episode"]) {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+  counter-reset: episode;
+}
+#listChildrenCollapsible .listItem[data-type="Episode"] {
+  counter-increment: episode;
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch !important;
+  margin: 0 !important;
   padding: 10px !important;
   border-radius: var(--radius) !important;
   background: var(--surface-soft) !important;
   border: 1px solid rgba(255, 255, 255, .06);
-  transition: background .25s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease);
+  transition: background .25s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease), opacity .25s var(--ease);
 }
-.detailPageContent .listItem:hover,
-.childrenItemsContainer .listItem:hover {
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItemImage {
+  position: relative;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9;
+  margin: 0 !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  background-size: cover;
+}
+/* Numéro en pastille ronde */
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItemImage::before {
+  content: counter(episode);
+  position: absolute;
+  top: 10px; left: 10px;
+  z-index: 2;
+  min-width: 34px; height: 34px;
+  padding: 0 8px;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  font-weight: 700;
+  background: rgba(10, 10, 14, .55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+}
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItemBody { padding: 10px 4px 0 !important; }
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItemBodyText:first-child { font-weight: 600; }
+/* Boutons (vu, favori, menu) dans le coin, en verre */
+#listChildrenCollapsible .listItem[data-type="Episode"] .listViewUserDataButtons {
+  position: absolute;
+  top: 16px; right: 16px;
+  z-index: 2;
+  border-radius: 999px;
+  background: rgba(10, 10, 14, .55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity .25s var(--ease);
+}
+#listChildrenCollapsible .listItem[data-type="Episode"]:hover .listViewUserDataButtons,
+#listChildrenCollapsible .listItem[data-type="Episode"]:focus-within .listViewUserDataButtons { opacity: 1; }
+/* Résumé : caché, il se déplie au survol */
+#listChildrenCollapsible .listItem[data-type="Episode"] .listItem-overview {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  transition: max-height .35s var(--ease), opacity .35s var(--ease), margin .35s var(--ease);
+}
+#listChildrenCollapsible .listItem[data-type="Episode"]:hover .listItem-overview,
+#listChildrenCollapsible .listItem[data-type="Episode"]:focus-within .listItem-overview {
+  max-height: 7em;
+  opacity: .8;
+  margin-top: 6px;
+}
+#listChildrenCollapsible .listItem[data-type="Episode"]:hover {
   background: rgba(255, 255, 255, .08) !important;
-  box-shadow: 0 0 0 1px rgba(var(--glow), .3), 0 8px 26px rgba(var(--glow), .14);
-  transform: translateX(4px);
+  box-shadow: 0 0 0 1px rgba(var(--glow), .3), 0 10px 30px rgba(var(--glow), .14);
+  transform: translateY(-4px);
 }
-.listItemImage, .listItemImage-large { border-radius: 16px !important; overflow: hidden; }
-.listItemBodyText:first-child { font-weight: 600; }
-.listItem .itemProgressBar { margin: 0 10px 8px !important; }
+/* Épisodes vus : atténués */
+#listChildrenCollapsible .listItem[data-type="Episode"]:has(.playedIndicator) { opacity: .45; }
+#listChildrenCollapsible .listItem[data-type="Episode"]:has(.playedIndicator):hover { opacity: 1; }
+/* Épisode à reprendre : en cours, ou premier non vu après un épisode vu */
+#listChildrenCollapsible .listItem[data-type="Episode"][data-positionticks],
+#listChildrenCollapsible .listItem[data-type="Episode"]:has(.playedIndicator) + .listItem:not(:has(.playedIndicator)) {
+  border-color: rgba(var(--glow), .7);
+  box-shadow: 0 0 0 1px rgba(var(--glow), .5), 0 0 40px rgba(var(--glow), .2);
+}
+@media (min-width: 900px) {
+  #listChildrenCollapsible .listItem[data-type="Episode"][data-positionticks],
+  #listChildrenCollapsible .listItem[data-type="Episode"]:has(.playedIndicator) + .listItem:not(:has(.playedIndicator)) {
+    grid-column: span 2;
+  }
+}
+
+/* Autres listes (playlists, albums) : lignes de verre arrondies */
+.detailPageContent .listItem:not([data-type="Episode"]) {
+  border-radius: var(--radius) !important;
+  transition: background .25s var(--ease);
+}
+.detailPageContent .listItem:not([data-type="Episode"]):hover { background: var(--surface-soft) !important; }
+.listItemImage { border-radius: 12px !important; }
+
+/* Cartes d'épisodes ailleurs (« Plus de saison ») : vus atténués */
+.card[data-type="Episode"]:has(.playedIndicator) .cardBox { opacity: .55; transition: opacity .25s var(--ease); }
+.card[data-type="Episode"]:has(.playedIndicator):hover .cardBox { opacity: 1; }
 
 /* ---------- Adaptation aux écrans ---------- */
 
@@ -238,14 +357,17 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader),
   .MuiAppBar-positionFixed .MuiButton-startIcon { margin: 0 !important; }
   .MuiAppBar-positionFixed .MuiButton-startIcon > * { font-size: 22px !important; }
   .mainDetailButtons .detailButton { width: 42px; height: 42px; }
-  .detailPageContent .listItem, .childrenItemsContainer .listItem { padding: 8px !important; }
+  #listChildrenCollapsible .itemsContainer:has(> .listItem[data-type="Episode"]) { grid-template-columns: 1fr; }
   .page { padding-bottom: 7em !important; }
 }
 
 /* Écrans tactiles : pas d'effet de survol qui reste collé après un appui */
 @media (hover: none) {
   html:not(.layout-tv) .card:hover .cardBox { transform: none; }
-  html:not(.layout-tv) .detailPageContent .listItem:hover { transform: none; }
+  html:not(.layout-tv) #listChildrenCollapsible .listItem:hover { transform: none; }
+  /* Pas de survol sur tactile/TV : résumé et boutons toujours visibles */
+  #listChildrenCollapsible .listItem[data-type="Episode"] .listItem-overview { max-height: 7em; opacity: .8; margin-top: 6px; -webkit-line-clamp: 3; }
+  #listChildrenCollapsible .listItem[data-type="Episode"] .listViewUserDataButtons { opacity: 1; }
 }
 
 /* TV : barre en haut d'origine (navigation à la télécommande), en verre ;
