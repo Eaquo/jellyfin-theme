@@ -161,8 +161,12 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
 .mdl-slider-background-lower { background: var(--accent) !important; }
 
 /* ---------- Page de détail (film, série, épisode) ---------- */
-/* Pas de bande grise : titre et boutons flottent sur le fond */
-.detailRibbon { background: none !important; box-shadow: none !important; }
+/* Pas de bande grise : titre, boutons et contenu flottent sur le même fond */
+.detailRibbon, .detailPagePrimaryContainer, .detailPageSecondaryContainer,
+.detailPageWrapperContainer, .itemDetailPage .detailPageContent {
+  background: none !important;
+  box-shadow: none !important;
+}
 .detailImageContainer .cardScalable {
   box-shadow: 0 0 0 1px var(--border), 0 0 60px rgba(var(--glow), .12), 0 30px 70px rgba(0, 0, 0, .75);
 }
@@ -191,32 +195,25 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
 
 .trackSelections .selectContainer select { border-radius: 999px !important; }
 
-/* ---------- Saisons en pilules (page d'une série) ---------- */
-#listChildrenCollapsible .itemsContainer:has(> .card[data-type="Season"]) {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding-block: 6px;
-}
-#listChildrenCollapsible .card[data-type="Season"] { width: auto !important; margin: 0 !important; }
-#listChildrenCollapsible .card[data-type="Season"] .cardScalable { display: none; }
-#listChildrenCollapsible .card[data-type="Season"] .cardBox { transform: none !important; margin: 0 !important; }
-#listChildrenCollapsible .card[data-type="Season"] .cardFooter {
-  padding: 8px 18px !important;
+/* ---------- Saisons (page d'une série) : affiche + titre en pilule ---------- */
+#listChildrenCollapsible .card[data-type="Season"] .cardFooter { padding-top: 8px !important; }
+#listChildrenCollapsible .card[data-type="Season"] .cardText:first-child {
+  display: inline-block;
+  padding: 4px 14px !important;
   border-radius: 999px;
   background: var(--surface-soft);
   border: 1px solid var(--border);
+  font-weight: 600;
   transition: background .25s var(--ease), box-shadow .25s var(--ease);
 }
-#listChildrenCollapsible .card[data-type="Season"] .cardText { padding: 0 !important; font-weight: 600; }
-#listChildrenCollapsible .card[data-type="Season"] .cardText-secondary { display: none; }
-#listChildrenCollapsible .card[data-type="Season"]:hover .cardFooter,
-#listChildrenCollapsible .card[data-type="Season"]:focus-within .cardFooter {
+#listChildrenCollapsible .card[data-type="Season"]:hover .cardText:first-child,
+#listChildrenCollapsible .card[data-type="Season"]:focus-within .cardText:first-child {
   background: rgba(255, 255, 255, .1);
   box-shadow: 0 0 0 1px rgba(var(--glow), .4), 0 4px 18px rgba(var(--glow), .18);
 }
-/* Saison entièrement vue : pilule atténuée */
-#listChildrenCollapsible .card[data-type="Season"]:has(.playedIndicator) .cardFooter { opacity: .5; }
+/* Saison entièrement vue : atténuée */
+#listChildrenCollapsible .card[data-type="Season"]:has(.playedIndicator) .cardBox { opacity: .5; transition: opacity .25s var(--ease); }
+#listChildrenCollapsible .card[data-type="Season"]:has(.playedIndicator):hover .cardBox { opacity: 1; }
 
 /* ---------- Épisodes en grille (page d'une saison) ---------- */
 #listChildrenCollapsible .itemsContainer:has(> .listItem[data-type="Episode"]) {
