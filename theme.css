@@ -89,6 +89,12 @@ body { color: var(--text); }
 /* Pas de fond gris dans les coins : la carte est découpée à son arrondi */
 .cardScalable { overflow: hidden; background: transparent !important; }
 .cardPadder, .cardContent, .cardBox, .visualCardBox { background-color: transparent !important; }
+/* Vignettes sans image : verre teinté */
+[class*="defaultCardBackground"] {
+  background: rgba(255, 255, 255, .06) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
 .cardBox { transition: transform .35s var(--ease); }
 .card:hover .cardBox, .card:focus-within .cardBox { transform: translateY(-6px) scale(1.03); }
 .cardScalable { box-shadow: 0 8px 22px rgba(0, 0, 0, .45); transition: box-shadow .35s var(--ease); }
@@ -108,6 +114,13 @@ body { color: var(--text); }
 .mdl-slider-background-lower { background: var(--accent) !important; }
 
 /* ---------- Page de détail ---------- */
+.detailRibbon {
+  background: var(--surface) !important;
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-radius: var(--radius);
+  margin-inline: 1em;
+}
 .detailImageContainer .cardScalable { box-shadow: 0 24px 60px rgba(0, 0, 0, .7); }
 
 /* Apparition en fondu */
