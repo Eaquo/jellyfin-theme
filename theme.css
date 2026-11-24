@@ -86,6 +86,9 @@ body { color: var(--text); }
 
 /* ---------- Affiches ---------- */
 .cardScalable, .cardImageContainer, .cardContent, .cardOverlayContainer { border-radius: var(--radius) !important; }
+/* Pas de fond gris dans les coins : la carte est découpée à son arrondi */
+.cardScalable { overflow: hidden; background: transparent !important; }
+.cardPadder, .cardContent, .cardBox, .visualCardBox { background-color: transparent !important; }
 .cardBox { transition: transform .35s var(--ease); }
 .card:hover .cardBox, .card:focus-within .cardBox { transform: translateY(-6px) scale(1.03); }
 .cardScalable { box-shadow: 0 8px 22px rgba(0, 0, 0, .45); transition: box-shadow .35s var(--ease); }
