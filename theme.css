@@ -442,7 +442,7 @@ html:not(.layout-tv) .skinHeader:not(.osdHeader) .emby-tab-button-active {
 .videoOsdBottom {
   left: 50% !important;
   right: auto !important;
-  bottom: calc(18px + env(safe-area-inset-bottom, 0px)) !important;
+  bottom: calc(40px + env(safe-area-inset-bottom, 0px)) !important;
   transform: translateX(-50%);
   width: min(1100px, calc(100vw - 32px)) !important;
   padding: 10px 18px 8px !important;
